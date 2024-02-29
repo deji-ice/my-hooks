@@ -6,7 +6,7 @@ import sun from "../assets/icon-sun.svg";
 
 function Navbar({ setDarkMode, darkMode }) {
   return (
-    <nav className=" fixed w-screen flex">
+    <nav className=" fixed w-screen flex top-0">
       <div>
         {darkMode ? (
           <img src={imageDark} alt="" className="absolute -z-10" />
