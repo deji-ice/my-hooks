@@ -6,30 +6,32 @@ import { v4 as uuidv4 } from "uuid";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
-  const initialArray = [
-    { id: 1, text: "hello world" },
-    { id: 1, text: "hello world" },
-    { id: 1, text: "hello world" },
-  ];
+  const initialArray = [{ id: 1, text: "hello world" }];
   const [list, setList] = useState(initialArray);
   const [input, setInput] = useState("");
 
   useEffect(() => {
-    console.log("Fetching list from localStorage");
-    const a = window.localStorage.getItem("todoList");
-    console.log("Stored list:", a);
-    if (a !== null) setList(JSON.parse(a));
+    const data = localStorage.getItem("todoList");
+    const parsedData = JSON.parse(data);
+    setList(parsedData);
+    console.log(data);
+    console.log(JSON.parse(data));
   }, []);
 
-  useEffect(() => {
-    if (list) {
-      // console.log("Storing list in localStorage:", list);
-    }
-  }, [list]);
+  // useEffect(() => {
+  //   if (list) {
+  //     // console.log("Storing list in localStorage:", list);
+  //   }
+  // }, [list]);
+
+  const deleteTodo = (idToDelete) => {
+    setList(list.filter((todo) => todo.id !== idToDelete));
+    localStorage.setItem("todoList", JSON.stringify(list));
+  };
 
   function handleSubmit(e) {
     e.preventDefault();
-    setList((prev) => [...prev, {id: uuidv4(), text: input}]);
+    setList((prev) => [...prev, { id: uuidv4(), text: input }]);
     localStorage.setItem("todoList", JSON.stringify(list));
     console.log("form submitted");
   }
@@ -42,7 +44,7 @@ function App() {
     <div className={`flex flex-col ${darkMode && "dark"}`}>
       <Navbar setDarkMode={setDarkMode} darkMode={darkMode} />
       <Input handleInput={handleInput} handleSubmit={handleSubmit} />
-      <TodoList list={list} />
+      <TodoList list={list} deleteTodo={deleteTodo} />
     </div>
   );
 }
